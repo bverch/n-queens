@@ -17,6 +17,16 @@
 
 window.findNRooksSolution = function(n) {
   var solution = undefined; //fixme
+  //make new board
+
+  //inner recursive function
+    //if the number of rooks is equal to the size of the board
+      //check if there are no conflicts
+      //if no conflicts, solution = board
+      //else if conflicts return
+    //else recurse
+    //loop over "children" of the current board, and call our inner recursive function on each "child"
+    //clear the point that this function added
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;

@@ -79,12 +79,26 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      //define counter and currRows
+      var counter = 0;
+      var currRow = this.rows()[rowIndex];
+      //iterate over the row
+      for (var i = 0; i < currRow.length; i++) {
+        //add row index value to counter
+        counter += currRow[i];
+      }
+      return counter > 1;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      //run hasRowConflictAt for every row in this.rows()
+      for (var i = 0; i < this.rows().length; i++) {
+        if (this.hasRowConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -94,12 +108,22 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var counter = 0;
+      var boardRows = this.rows();
+      for (var i = 0; i < boardRows.length; i++) {
+        counter += boardRows[i][colIndex];
+      }
+      return counter > 1;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      for (var i = 0; i < this.rows().length; i++) {
+        if (this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -109,12 +133,37 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      //set first column to input
+      var currCol = majorDiagonalColumnIndexAtFirstRow;
+      var currRow = 0;
+      var counter = 0;
+      var rows = this.rows();
+      //if input is negative
+      if (currCol < 0) {
+        //set current row to abs(input)
+        currRow = Math.abs(currCol);
+        //set first column to 0
+        currCol = 0;
+      }
+      var startCol = currCol;
+      //for each row until last item
+      for (currRow; currRow < rows.length - startCol; currRow++) {
+        //increment counter by the boardRows at current row and current column
+        counter += rows[currRow][currCol];
+        //increment current column
+        currCol++;
+      }
+      return counter > 1; // fixme
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      for (var i = 2 - this.rows().length; i < this.rows().length - 1; i++) {
+        if (this.hasMajorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -124,12 +173,37 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      //set starting column to input
+      var currCol = minorDiagonalColumnIndexAtFirstRow;
+      var rows = this.rows();
+      var currRow = 0;
+      var counter = 0;
+      //if input is greater than last column index
+      if (currCol > rows.length - 1) {
+        //set current row to input minus last column index
+        currRow = currCol - (rows.length - 1);
+        //set starting column to last index
+        currCol = rows.length - 1;
+      }
+      var endRow = currCol;
+      // for each row until 
+      for (currRow; currRow < endRow + 1; currRow++) {
+        //increment counter by boardRows at current row current column
+        counter += rows[currRow][currCol];
+        //decrement current column
+        currCol--;
+      }
+      return counter > 1; // fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      for (var i = 1; i < this.rows().length * 2 - 2; i++) {
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
