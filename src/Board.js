@@ -81,12 +81,7 @@
     hasRowConflictAt: function(rowIndex) {
       //define counter and currRows
       var counter = 0;
-      var currRow = this.rows()[rowIndex];
-      //iterate over the row
-      for (var i = 0; i < currRow.length; i++) {
-        //add row index value to counter
-        counter += currRow[i];
-      }
+      counter += _.reduce(this.rows()[rowIndex], function(memo, col) { return memo + col; });
       return counter > 1;
     },
 
@@ -133,6 +128,12 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      return this.countMajorDiagonal(majorDiagonalColumnIndexAtFirstRow) > 1; // fixme
+    },
+
+
+
+    countMajorDiagonal: function(majorDiagonalColumnIndexAtFirstRow) {
       //set first column to input
       var currCol = majorDiagonalColumnIndexAtFirstRow;
       var currRow = 0;
@@ -153,7 +154,7 @@
         //increment current column
         currCol++;
       }
-      return counter > 1; // fixme
+      return counter;
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -210,6 +211,7 @@
 
 
   });
+  
 
   var makeEmptyMatrix = function(n) {
     return _(_.range(n)).map(function() {

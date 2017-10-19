@@ -36,22 +36,20 @@ window.findNRooksSolution = function(n) {
     for (var y = 0; y < rooks + 1; y++) {
       if (!(_.reduce(board.rows()[y], function(memo, col) { return memo + col; }, 0))) {
         for (var x = 0; x < boardLength; x++) {
-          var isClear = true;
+          var colIsClear = true;
           for (var i = 0; i < boardLength; i++) {
             if (board.rows()[i][x] === 1) {
-              isClear = false;
+              colIsClear = false;
             }
           }
-          if (isClear) {
-            if (board.rows()[y][x] !== 1) {
-              board.togglePiece(y, x);
-              pieceAdder(rooks + 1);
-              if (solution) {
-                return;
-              }
-              //clear the point that this function added
-              board.togglePiece(y, x);
+          if (colIsClear) {
+            board.togglePiece(y, x);
+            pieceAdder(rooks + 1);
+            if (solution) {
+              return;
             }
+            //clear the point that this function added
+            board.togglePiece(y, x);
           }
         }
       }
@@ -69,7 +67,6 @@ window.countNRooksSolutions = function(n) {
   //make new board
   var boardLength = n;
   var board = new Board({n: boardLength});
-  var solutions = {};
 
   //inner recursive function
   var pieceAdder = function(rooks) {
@@ -77,11 +74,8 @@ window.countNRooksSolutions = function(n) {
     if (rooks === boardLength) {
       //check if there are no conflicts
       if (!board.hasAnyRooksConflicts()) {
-        if (solutions[JSON.stringify(board.rows())] === undefined) {
-          //if no conflicts, solution = board
-          solutionCount++;
-          solutions[JSON.stringify(board.rows())] = 0;
-        }
+        //if no conflicts, solution = board
+        solutionCount++;
       }
       return;
     }
@@ -89,19 +83,17 @@ window.countNRooksSolutions = function(n) {
     for (var y = 0; y < rooks + 1; y++) {
       if (!(_.reduce(board.rows()[y], function(memo, col) { return memo + col; }, 0))) {
         for (var x = 0; x < boardLength; x++) {
-          var isClear = true;
+          var colIsClear = true;
           for (var i = 0; i < boardLength; i++) {
             if (board.rows()[i][x] === 1) {
-              isClear = false;
+              colIsClear = false;
             }
           }
-          if (isClear) {
-            if (board.rows()[y][x] !== 1) {
-              board.togglePiece(y, x);
-              pieceAdder(rooks + 1);
-              //clear the point that this function added
-              board.togglePiece(y, x);
-            }
+          if (colIsClear) {
+            board.togglePiece(y, x);
+            pieceAdder(rooks + 1);
+            //clear the point that this function added
+            board.togglePiece(y, x);
           }
         }
       }
@@ -115,15 +107,95 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = undefined;
+  var solutionCount = 0;
+  //make new board
+  var boardLength = n;
+  var board = new Board({n: boardLength});
+
+  //inner recursive function
+  var pieceAdder = function(rooks) {
+    //if the number of rooks is equal to the size of the board
+    if (rooks === boardLength) {
+      //check if there are no conflicts
+      if (!board.hasAnyQueensConflicts()) {
+        //if no conflicts, solution = board
+        solution = board.rows();
+      }
+      return;
+    }
+    //loop over "children" of the current board, and call our inner recursive function on each "child"
+    for (var y = 0; y < rooks + 1; y++) {
+      if (!(_.reduce(board.rows()[y], function(memo, col) { return memo + col; }, 0))) {
+        for (var x = 0; x < boardLength; x++) {
+          var colIsClear = true;
+          for (var i = 0; i < boardLength; i++) {
+            if (board.rows()[i][x] === 1) {
+              colIsClear = false;
+            }
+          }
+          if (colIsClear) {
+            board.togglePiece(y, x);
+            pieceAdder(rooks + 1);
+            if (solution) {
+              return;
+            }
+            //clear the point that this function added
+            board.togglePiece(y, x);
+          }
+        }
+      }
+    }
+  };
+  pieceAdder(0);
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+  if (solution === undefined) {
+    solution = new Board({n: boardLength}).rows();
+  }
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solution = undefined;
+  var solutionCount = 0;
+  //make new board
+  var boardLength = n;
+  var board = new Board({n: boardLength});
+
+  //inner recursive function
+  var pieceAdder = function(rooks) {
+    //if the number of rooks is equal to the size of the board
+    if (rooks === boardLength) {
+      //check if there are no conflicts
+      if (!board.hasAnyQueensConflicts()) {
+        //if no conflicts, solution = board
+        solutionCount++;
+      }
+      return;
+    }
+    //loop over "children" of the current board, and call our inner recursive function on each "child"
+    for (var y = 0; y < rooks + 1; y++) {
+      if (!(_.reduce(board.rows()[y], function(memo, col) { return memo + col; }, 0))) {
+        for (var x = 0; x < boardLength; x++) {
+          var colIsClear = true;
+          for (var i = 0; i < boardLength; i++) {
+            if (board.rows()[i][x] === 1) {
+              colIsClear = false;
+            }
+          }
+          if (colIsClear) {
+            board.togglePiece(y, x);
+            pieceAdder(rooks + 1);
+            //clear the point that this function added
+            board.togglePiece(y, x);
+          }
+        }
+      }
+    }
+  };
+  pieceAdder(0);
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
