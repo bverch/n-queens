@@ -103,7 +103,7 @@ window.findNQueensSolution = function(n) {
   var colOccupied = {};
 
   //inner recursive function
-  var pieceAdder = function(rooks) {
+  var pieceAdder = function(rooks, diagLeft, diagRight) {
     //if the number of rooks is equal to the size of the board
     if (rooks === boardLength) {
       //check if there are no conflicts
@@ -116,10 +116,10 @@ window.findNQueensSolution = function(n) {
     //loop over "children" of the current board, and call our inner recursive function on each "child"
     var y = rooks;
     for (var x = 0; x < boardLength; x++) {
-      if (!colOccupied[x]) {
+      if ((!colOccupied[x]) && (x !== diagLeft) && (x !== diagRight)) {
         board.togglePiece(y, x);
         colOccupied[x] = 1;
-        pieceAdder(rooks + 1);
+        pieceAdder(rooks + 1, x - 1, x + 1);
         if (solution) {
           return;
         }
