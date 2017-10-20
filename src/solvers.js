@@ -20,6 +20,7 @@ window.findNRooksSolution = function(n) {
   //make new board
   var boardLength = n;
   var board = new Board({n: boardLength});
+  var colOccupied = {};
 
   //inner recursive function
   var pieceAdder = function(rooks) {
@@ -33,25 +34,18 @@ window.findNRooksSolution = function(n) {
       return;
     }
     //loop over "children" of the current board, and call our inner recursive function on each "child"
-    for (var y = 0; y < rooks + 1; y++) {
-      if (!(_.reduce(board.rows()[y], function(memo, col) { return memo + col; }, 0))) {
-        for (var x = 0; x < boardLength; x++) {
-          var colIsClear = true;
-          for (var i = 0; i < boardLength; i++) {
-            if (board.rows()[i][x] === 1) {
-              colIsClear = false;
-            }
-          }
-          if (colIsClear) {
-            board.togglePiece(y, x);
-            pieceAdder(rooks + 1);
-            if (solution) {
-              return;
-            }
-            //clear the point that this function added
-            board.togglePiece(y, x);
-          }
+    var y = rooks;
+    for (var x = 0; x < boardLength; x++) {
+      if (!colOccupied[x]) {
+        board.togglePiece(y, x);
+        colOccupied[x] = 1;
+        pieceAdder(rooks + 1);
+        if (solution) {
+          return;
         }
+        //clear the point that this function added
+        board.togglePiece(y, x);
+        colOccupied[x] = 0;
       }
     }
   };
@@ -67,6 +61,7 @@ window.countNRooksSolutions = function(n) {
   //make new board
   var boardLength = n;
   var board = new Board({n: boardLength});
+  var colOccupied = {};
 
   //inner recursive function
   var pieceAdder = function(rooks) {
@@ -80,22 +75,15 @@ window.countNRooksSolutions = function(n) {
       return;
     }
     //loop over "children" of the current board, and call our inner recursive function on each "child"
-    for (var y = 0; y < rooks + 1; y++) {
-      if (!(_.reduce(board.rows()[y], function(memo, col) { return memo + col; }, 0))) {
-        for (var x = 0; x < boardLength; x++) {
-          var colIsClear = true;
-          for (var i = 0; i < boardLength; i++) {
-            if (board.rows()[i][x] === 1) {
-              colIsClear = false;
-            }
-          }
-          if (colIsClear) {
-            board.togglePiece(y, x);
-            pieceAdder(rooks + 1);
-            //clear the point that this function added
-            board.togglePiece(y, x);
-          }
-        }
+    var y = rooks;
+    for (var x = 0; x < boardLength; x++) {
+      if (!colOccupied[x]) {
+        board.togglePiece(y, x);
+        colOccupied[x] = 1;
+        pieceAdder(rooks + 1);
+        //clear the point that this function added
+        board.togglePiece(y, x);
+        colOccupied[x] = 0;
       }
     }
   };
@@ -112,6 +100,7 @@ window.findNQueensSolution = function(n) {
   //make new board
   var boardLength = n;
   var board = new Board({n: boardLength});
+  var colOccupied = {};
 
   //inner recursive function
   var pieceAdder = function(rooks) {
@@ -125,25 +114,18 @@ window.findNQueensSolution = function(n) {
       return;
     }
     //loop over "children" of the current board, and call our inner recursive function on each "child"
-    for (var y = 0; y < rooks + 1; y++) {
-      if (!(_.reduce(board.rows()[y], function(memo, col) { return memo + col; }, 0))) {
-        for (var x = 0; x < boardLength; x++) {
-          var colIsClear = true;
-          for (var i = 0; i < boardLength; i++) {
-            if (board.rows()[i][x] === 1) {
-              colIsClear = false;
-            }
-          }
-          if (colIsClear) {
-            board.togglePiece(y, x);
-            pieceAdder(rooks + 1);
-            if (solution) {
-              return;
-            }
-            //clear the point that this function added
-            board.togglePiece(y, x);
-          }
+    var y = rooks;
+    for (var x = 0; x < boardLength; x++) {
+      if (!colOccupied[x]) {
+        board.togglePiece(y, x);
+        colOccupied[x] = 1;
+        pieceAdder(rooks + 1);
+        if (solution) {
+          return;
         }
+        //clear the point that this function added
+        board.togglePiece(y, x);
+        colOccupied[x] = 0;
       }
     }
   };
@@ -163,6 +145,7 @@ window.countNQueensSolutions = function(n) {
   //make new board
   var boardLength = n;
   var board = new Board({n: boardLength});
+  var colOccupied = {};
 
   //inner recursive function
   var pieceAdder = function(rooks) {
@@ -176,22 +159,15 @@ window.countNQueensSolutions = function(n) {
       return;
     }
     //loop over "children" of the current board, and call our inner recursive function on each "child"
-    for (var y = 0; y < rooks + 1; y++) {
-      if (!(_.reduce(board.rows()[y], function(memo, col) { return memo + col; }, 0))) {
-        for (var x = 0; x < boardLength; x++) {
-          var colIsClear = true;
-          for (var i = 0; i < boardLength; i++) {
-            if (board.rows()[i][x] === 1) {
-              colIsClear = false;
-            }
-          }
-          if (colIsClear) {
-            board.togglePiece(y, x);
-            pieceAdder(rooks + 1);
-            //clear the point that this function added
-            board.togglePiece(y, x);
-          }
-        }
+    var y = rooks;
+    for (var x = 0; x < boardLength; x++) {
+      if (!colOccupied[x]) {
+        board.togglePiece(y, x);
+        colOccupied[x] = 1;
+        pieceAdder(rooks + 1);
+        //clear the point that this function added
+        board.togglePiece(y, x);
+        colOccupied[x] = 0;
       }
     }
   };
